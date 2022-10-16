@@ -6,3 +6,7 @@ interface QA {
 	question: string,
 	answer: string,
 };
+interface QAList {
+	name: string,
+	list: QA[],
+};
