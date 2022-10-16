@@ -30,6 +30,12 @@ export default defineComponent({
 		};
 	},
 
+	watch: {
+		modelValue() {
+			this.selectList = this.modelValue;
+		},
+	},
+
 	methods: {
 		handleChange() {
 			this.$emit('update:model-value', this.selectList);

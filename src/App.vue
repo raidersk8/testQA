@@ -1,10 +1,12 @@
 <template>
 	<upload-list-q-a v-if="!isShowTest" @result="handleResult" />
 	<lists-q-a
-		v-model="selectList"
-		@update:model-value="selectList = $event"
+		v-model="selectListName"
+		@update:model-value="setSelectListName"
+		@start="start"
 		:all-lists="allLists"
 	/>
+	<switch-test :isDisable="isDisableSwitchTest" v-model="isStart" @update:model-value="switchTest" />
 	<test-q-a v-if="isShowTest" :list="currentList" @finish="handleFinish" />
 </template>
 
@@ -13,6 +15,7 @@ import { defineComponent } from 'vue';
 import ListsQA from './components/ListsQA.vue';
 import TestQA from './components/TestQA.vue';
 import UploadListQA from './components/UploadListQA.vue';
+import SwitchTest from './components/SwitchTest.vue';
 
 export default defineComponent({
 	name: 'App',
@@ -21,37 +24,64 @@ export default defineComponent({
 		UploadListQA,
 		TestQA,
 		ListsQA,
+		SwitchTest,
 	},
 
 	data(): {
-		currentList: QA[],
 		allLists: QAList[],
-		selectList: string,
+		selectListName: string,
+		isStart: boolean,
 	} {
 		return {
-			currentList: [],
 			allLists: [],
-			selectList: '',
+			selectListName: '',
+			isStart: false,
 		};
 	},
 
 	computed: {
+		currentList(): QA[] {
+			let result: QAList | undefined = this.allLists.find((item) => item.name == this.selectListName);
+			return result ? result.list : [];
+		},
+
 		isShowTest(): boolean {
-			return this.currentList.length > 0;
+			return this.isStart;
+		},
+
+		isDisableSwitchTest(): boolean {
+			return this.allLists.length == 0;
 		},
 	},
 
 	methods: {
 		handleResult({ listName, list }: { listName: string; list: QA[]}):void {
-			this.currentList = list;
 			this.allLists.push({
 				name: listName,
 				list,
 			});
+
+			// Если это первый загруженный тест, то запускаем его сразу
+			if (this.allLists.length == 1) {
+				this.setSelectListName(listName);
+				this.isStart = true;
+			}
 		},
 
-		handleFinish():void {
-			this.currentList = [];
+		handleFinish(): void {
+			this.switchTest(false);
+		},
+
+		handleSwitch(val: boolean): void {
+			this.switchTest(val);
+		},
+
+		switchTest(val: boolean): void {
+			this.isStart = val;
+		},
+
+		setSelectListName(val: string): void {
+			this.selectListName = val;
 		},
 	},
 });
