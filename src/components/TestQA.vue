@@ -1,11 +1,14 @@
 <template>
-	<div>{{question}}</div>
-	<input type="text" v-model="answer" @keyup.enter="handleKeyUpEnter">
-	<div>кол-во вопросов {{ countQuestions }}</div>
+	<div class="test-qa">
+		<div class="test-qa__question">{{question}}</div>
+		<input class="input test-qa__input" type="text" v-model="answer" @keyup.enter="handleKeyUpEnter">
+		<div class="test-qa__count">кол-во вопросов {{ countQuestions }}</div>
+	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import '@/scss/components/test-qa.scss';
 export default defineComponent({
 	props: {
 		list: {
@@ -31,6 +34,8 @@ export default defineComponent({
 			countError: 0, // Кол-во ошибок за один ответ
 		};
 	},
+
+	emits: ['finish'],
 
 	created(): void {
 		this.nextQuestion();

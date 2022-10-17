@@ -1,12 +1,13 @@
 <template>
 	<upload-list-q-a v-if="!isShowTest" @result="handleResult" />
-	<lists-q-a
-		v-model="selectListName"
-		@update:model-value="setSelectListName"
-		@start="start"
-		:all-lists="allLists"
-	/>
-	<switch-test :isDisable="isDisableSwitchTest" v-model="isStart" @update:model-value="switchTest" />
+	<div class="wrap-list-qa">
+		<lists-q-a
+			v-model="selectListName"
+			@update:model-value="setSelectListName"
+			:all-lists="allLists"
+		/>
+		<switch-test :isDisable="isDisableSwitchTest" v-model="isStart" @update:model-value="switchTest" />
+	</div>
 	<test-q-a v-if="isShowTest" :list="currentList" @finish="handleFinish" />
 </template>
 
@@ -16,6 +17,8 @@ import ListsQA from './components/ListsQA.vue';
 import TestQA from './components/TestQA.vue';
 import UploadListQA from './components/UploadListQA.vue';
 import SwitchTest from './components/SwitchTest.vue';
+import '@/scss/components/app.scss';
+import '@/scss/components/wrap-list-qa.scss';
 
 export default defineComponent({
 	name: 'App',

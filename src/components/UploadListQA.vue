@@ -1,11 +1,14 @@
 <template>
-	Загрузите файл
-	<input type="file" @change="onChange">
+	<div class="upload-list-qa">
+		<input type="file" hidden="true" ref="file" @change="onChange">
+		<button class="button" @click="handleClick">Загрузите файл</button>
+	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import parseQA from '@/api/parseQA';
+import '@/scss/components/upload-list-qa.scss';
 
 export default defineComponent({
 	emits: ['result'],
@@ -40,6 +43,12 @@ export default defineComponent({
 				listName,
 				list,
 			});
+		},
+
+		handleClick():void {
+			if(this.$refs.file instanceof HTMLInputElement) {
+				this.$refs.file.click();
+			}
 		},
 	},
 });
