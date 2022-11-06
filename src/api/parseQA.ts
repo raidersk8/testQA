@@ -9,8 +9,8 @@ const replacementSymbols: ReplacementSymbol[] = [
 		short: '[dvoetochie]',
 	},
 ];
-export default function parseQA(list: string[]): QA[] {
-	return list.map((item: string) => {
+export default function parseQA(content: string): QA[] {
+	return content.split('\r\n').map((item: string) => {
 		let arr = symbolsToShorts(item).split(':');
 		return {
 			answer: shortsToSymbols(arr.pop() || ''),
